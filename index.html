@@ -1,10 +1,47 @@
-```html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>安否確認</title>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    select {
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      margin: 15px 0 30px;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      margin: 12px 0;
+      font-size: 20px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    #result {
+      margin-top: 25px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 
 <body>
@@ -15,6 +52,9 @@
 
   <select id="name">
     <option value="">-- 名前を選択 --</option>
+    <option value="テスト太郎">テスト太郎</option>
+    <option value="テスト花子">テスト花子</option>
+    <option value="テスト次郎">テスト次郎</option>
   </select>
 
   <h2>あなたの安否</h2>
@@ -27,44 +67,19 @@
 
   <script>
 
-    // 社員名簿を取得
-    const employees =
-      JSON.parse(localStorage.getItem('employees')) || [];
-
-    const nameSelect =
-      document.getElementById('name');
-
-    // 社員名簿を名前の選択欄に表示
-    employees.forEach(function(name) {
-
-      const option =
-        document.createElement('option');
-
-      option.value = name;
-      option.textContent = name;
-
-      nameSelect.appendChild(option);
-
-    });
-
-    // 安否回答
     function answer(status) {
 
       const name =
         document.getElementById('name').value;
 
       if (name === '') {
-
         alert('名前を選択してください');
-
         return;
       }
 
-      // 今までの回答を取得
       let answers =
         JSON.parse(localStorage.getItem('anpiAnswers')) || {};
 
-      // この社員の回答を保存
       answers[name] = {
         status: status,
         time: new Date().toLocaleString('ja-JP')
@@ -75,7 +90,6 @@
         JSON.stringify(answers)
       );
 
-      // 画面に表示
       document.getElementById('result').textContent =
         name + 'さんの回答：' + status;
 
@@ -87,4 +101,3 @@
 
 </body>
 </html>
-```
