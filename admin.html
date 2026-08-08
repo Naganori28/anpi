@@ -1,0 +1,157 @@
+```html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>安否確認・総務管理画面</title>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 30px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .safe {
+      color: green;
+      font-weight: bold;
+    }
+
+    .injury {
+      color: orange;
+      font-weight: bold;
+    }
+
+    .difficult {
+      color: red;
+      font-weight: bold;
+    }
+
+    .unanswered {
+      color: gray;
+      font-weight: bold;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <h1>安否確認・総務管理画面</h1>
+
+  <p id="summary"></p>
+
+  <table>
+
+    <thead>
+      <tr>
+        <th>社員名</th>
+        <th>安否</th>
+        <th>回答日時</th>
+      </tr>
+    </thead>
+
+    <tbody id="answerList">
+    </tbody>
+
+  </table>
+
+  <script>
+
+    // 社員名簿を取得
+    const employees =
+      JSON.parse(localStorage.getItem('employees')) || [];
+
+    // 回答を取得
+    const answers =
+      JSON.parse(localStorage.getItem('anpiAnswers')) || {};
+
+    const answerList =
+      document.getElementById('answerList');
+
+    let answeredCount = 0;
+
+    // 社員一人ずつ表示
+    employees.forEach(function(name) {
+
+      const row =
+        document.createElement('tr');
+
+      const nameCell =
+        document.createElement('td');
+
+      const statusCell =
+        document.createElement('td');
+
+      const timeCell =
+        document.createElement('td');
+
+      nameCell.textContent = name;
+
+      // 回答があるか確認
+      if (answers[name]) {
+
+        statusCell.textContent =
+          answers[name].status;
+
+        timeCell.textContent =
+          answers[name].time;
+
+        answeredCount++;
+
+        if (answers[name].status === '無事') {
+          statusCell.className = 'safe';
+        }
+
+        if (answers[name].status === 'けがあり') {
+          statusCell.className = 'injury';
+        }
+
+        if (answers[name].status === '帰宅困難') {
+          statusCell.className = 'difficult';
+        }
+
+      } else {
+
+        statusCell.textContent = '未回答';
+
+        timeCell.textContent = '-';
+
+        statusCell.className = 'unanswered';
+
+      }
+
+      row.appendChild(nameCell);
+      row.appendChild(statusCell);
+      row.appendChild(timeCell);
+
+      answerList.appendChild(row);
+
+    });
+
+    // 回答状況
+    document.getElementById('summary').textContent =
+      '回答済み：' + answeredCount +
+      '人 ／ 全社員：' + employees.length + '人';
+
+  </script>
+
+</body>
+</html>
+```

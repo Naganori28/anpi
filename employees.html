@@ -1,0 +1,83 @@
+```html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>社員名簿</title>
+</head>
+
+<body>
+
+  <h1>社員名簿</h1>
+
+  <p>安否確認を行う社員を登録します。</p>
+
+  <input
+    type="text"
+    id="employeeName"
+    placeholder="社員名を入力"
+  >
+
+  <button onclick="addEmployee()">社員を追加</button>
+
+  <h2>登録社員</h2>
+
+  <ul id="employeeList"></ul>
+
+  <script>
+
+    // 保存されている社員名簿を取得
+    let employees =
+      JSON.parse(localStorage.getItem('employees')) || [];
+
+    // 社員を追加する
+    function addEmployee() {
+
+      const name =
+        document.getElementById('employeeName').value;
+
+      if (name === '') {
+        alert('社員名を入力してください');
+        return;
+      }
+
+      employees.push(name);
+
+      localStorage.setItem(
+        'employees',
+        JSON.stringify(employees)
+      );
+
+      document.getElementById('employeeName').value = '';
+
+      displayEmployees();
+    }
+
+    // 社員名簿を表示
+    function displayEmployees() {
+
+      const list =
+        document.getElementById('employeeList');
+
+      list.innerHTML = '';
+
+      employees.forEach(function(name, index) {
+
+        const li = document.createElement('li');
+
+        li.textContent = name;
+
+        list.appendChild(li);
+
+      });
+    }
+
+    // 最初に表示
+    displayEmployees();
+
+  </script>
+
+</body>
+</html>
+```
